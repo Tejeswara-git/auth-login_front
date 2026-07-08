@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-const API = import.meta.env.VITE_API
+const API = 'http://localhost:5000'|| import.meta.env.VITE_API
 
 const Login = () => {
    
