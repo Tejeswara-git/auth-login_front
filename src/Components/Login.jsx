@@ -9,28 +9,31 @@ const Login = () => {
     const [password, setpassword] = useState('')
     const navigate = useNavigate()
 
-    const handleSubmit =async (e)=>{
-e.preventDefault()
-const response = await fetch (`${API}/api/user/login`, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(
-        {email,password}
-    )
-})
-const data = await response.json()
-if (response.ok) {
-    console.log(data);
-  
-    setemail("");
-    setpassword("");
-    navigate('/welcome')
-  } else {
-    console.log(data.message);
-  }
-}
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            const response = await fetch(`${API}/api/user/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            })
+            const data = await response.json()
+            if (response.ok) {
+                console.log(data);
+                setemail("");
+                setpassword("");
+                navigate('/welcome')
+            } else {
+                console.log(data.message);
+                alert(data.message || 'Login failed. Please check your credentials.')
+            }
+        } catch (error) {
+            console.error('Network error:', error)
+            alert('Could not connect to server. Please try again.')
+        }
+    }
 
   return (
     <div>

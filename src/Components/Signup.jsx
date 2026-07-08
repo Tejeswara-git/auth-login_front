@@ -1,39 +1,43 @@
 import React from 'react'
 import { useState } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 const API = import.meta.env.VITE_API
 
 const Signup = () => {
     const [username, setusername] = useState('')
     const [email, setemail] = useState('')
     const [password, setpassword] = useState('')
+    const navigate = useNavigate()
 
     const handleSubmit = async(e)=>{
         e.preventDefault()
 
-        const response = await fetch(`${API}/api/user/register`  , {
-            method: 'POST',
-            headers : {
-                'Content-Type' : 'application/json',
-            },
-            body : JSON.stringify({
-                username, email, password
+        try {
+            const response = await fetch(`${API}/api/user/register`, {
+                method: 'POST',
+                headers : {
+                    'Content-Type' : 'application/json',
+                },
+                body : JSON.stringify({
+                    username, email, password
+                })
             })
-        
-        })
-        const data =await response.json()
+            const data = await response.json()
 
-if(response.ok){
-    console.log("User Registered");
-    setusername("");
-    setemail("");
-    setpassword("");
-
-}
-else{
-    console.log(data.message);
-}
-    
+            if(response.ok){
+                console.log("User Registered");
+                setusername("");
+                setemail("");
+                setpassword("");
+                navigate('/login')
+            } else {
+                console.log(data.message);
+                alert(data.message || 'Signup failed. Please try again.')
+            }
+        } catch (error) {
+            console.error('Network error:', error)
+            alert('Could not connect to server. Please try again.')
+        }
     }
 
 
